@@ -1,2 +1,1 @@
-# ScientificResearch_UEH500
-ComputerVision_CarCounter
+Required Python version: Python 3.7.9 (64-bit)
