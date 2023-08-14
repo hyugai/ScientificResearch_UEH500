@@ -4,7 +4,6 @@ import cv2
 import math
 import random
 import cvzone
-#from scipy.optimize import linear_sum_assignment as linear_assignment
 
 # Class_list
 cls_file=open('coco-classes.txt','r')
