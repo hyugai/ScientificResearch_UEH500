@@ -22,7 +22,7 @@ from ultralytics import YOLO
 from tracker import Tracker
 
 # Create pre-trained instance of YOLO and one for tracker
-model=YOLO('yolov8m.pt')
+model=YOLO('yolov8l.pt')
 tracker=Tracker()
 
 # Video input
@@ -31,8 +31,16 @@ video_cap=cv2.VideoCapture(video_path)
 
 ret,frame=video_cap.read()
 
+# Save video
+video_save=os.path.join('.','data','output.mp4')
+fourcc=cv2.VideoWriter_fourcc(*'MP4V')
+width=video_cap.get(3)
+height=video_cap.get(4)
+video_out=cv2.VideoWriter(video_save,1983148141,24,(int(width),int(height)))
+
 # Draw the line
-limits=[150,750,1920,750]
+limits1=[0,250,852,250]
+limits2=[0,200,852,200]
 
 # Count
 total_count=[]
@@ -64,7 +72,8 @@ while ret:
         tracker.update(frame,detections)
 
         # Draw the line
-        line = cv2.line(frame, (limits[0], limits[1]), (limits[2], limits[3]), (0, 0, 255), 5)
+        line1 = cv2.line(frame, (limits1[0], limits1[1]), (limits1[2], limits1[3]), (0, 0, 255), 5)
+        line2 = cv2.line(frame, (limits2[0], limits2[1]), (limits2[2], limits2[3]), (0, 0, 255), 5)
 
         # Get ID and the data for bbox by using ATTRIBUTES .bbox and .track_id
         # .tracks is used to access the list 'tracks' containing specific data called 'Track'
@@ -85,9 +94,14 @@ while ret:
             cv2.circle(frame,(int(cx), int(cy)), 5, (colors[track_id % len(colors)]), cv2.FILLED)
 
             # COUNT #######
-            if limits[0]<cx<limits[2] and limits[1]-20<cy<limits[1]+20:
+            if limits1[0]<cx<limits1[2] and limits11]-20<cy<limits1[1]+20:
                 if total_count.count(track_id)==0:
                     total_count.append(track_id)
+            elif limits2[0]<cx<limits2[2] and limits2[1]-20<cy<limits2[1]+20:
+                if total_count.count(track_id)==0:
+                    total_count.append(track_id)
+            else:
+                continue
 
                     # Change the color of the line when a car crossing
                     line = cv2.line(frame, (limits[0], limits[1]), (limits[2], limits[3]), (0, 255, 255), 5)
@@ -97,9 +111,12 @@ while ret:
 
     cv2.imshow('frame',frame)
     cv2.waitKey(1)
-
+    
+    # Save video
+    video_out.write(frame)
     # Renew the frame
     ret,frame=video_cap.read()
 
 video_cap.release()
+video_out.release()
 cv2.destroyAllWindows()
