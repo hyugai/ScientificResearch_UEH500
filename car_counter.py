@@ -4,7 +4,6 @@ import cv2
 import math
 import random
 import cvzone
-#from scipy.optimize import linear_sum_assignment as linear_assignment
 
 # Class_list
 cls_file=open('coco-classes.txt','r')
@@ -33,14 +32,13 @@ video_cap=cv2.VideoCapture(video_path)
 ret,frame=video_cap.read()
 
 # Save video
-video_save=os.path.join('.','data','output_deepsortyolov8l.mp4')
+video_save=os.path.join('.','data','output.mp4')
 fourcc=cv2.VideoWriter_fourcc(*'MP4V')
 width=video_cap.get(3)
 height=video_cap.get(4)
 video_out=cv2.VideoWriter(video_save,1983148141,24,(int(width),int(height)))
 
 # Draw the line
-#limits=[150,750,1920,750]
 limits1=[0,250,852,250]
 limits2=[0,200,852,200]
 
@@ -66,7 +64,6 @@ while ret:
             if class_current=='car' or class_current=='truck' or class_current=='motorbike' or class_current=='bus' and conf>0.5:
                 detections.append([int(x_min),int(y_min),int(x_max),int(y_max),conf])
         # Output of detections
-        #print(detections)
 
         # TRACKING #######
         # Create bbox for each object in frame and assign them a specific ID
