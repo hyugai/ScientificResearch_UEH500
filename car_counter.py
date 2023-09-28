@@ -120,7 +120,7 @@ while ret:
 
     # Renew the frame
     ret,frame=video_cap.read()
-    print('total cars: ',len(total_count))
+    print('total vehicles: ',len(total_count))
 
 
 video_cap.release()
